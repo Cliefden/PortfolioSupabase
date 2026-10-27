@@ -1,0 +1,303 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "An account with this email already exists. Sign in instead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det finns redan ett konto med den här e-postadressen. Logga in i stället."
+          }
+        }
+      }
+    },
+    "Choose a password different from your current one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Välj ett annat lösenord än ditt nuvarande."
+          }
+        }
+      }
+    },
+    "Confirm your email address first. Check your inbox for the link.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bekräfta din e-postadress först. Titta efter länken i din inkorg."
+          }
+        }
+      }
+    },
+    "Could not sign in with Apple. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det gick inte att logga in med Apple. Försök igen."
+          }
+        }
+      }
+    },
+    "Could not sign in with Apple: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det gick inte att logga in med Apple: %@"
+          }
+        }
+      }
+    },
+    "Couldn't connect. Check your connection and try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det gick inte att ansluta. Kontrollera anslutningen och försök igen."
+          }
+        }
+      }
+    },
+    "Enter your email address": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ange din e-postadress"
+          }
+        }
+      }
+    },
+    "Enter your name": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ange ditt namn"
+          }
+        }
+      }
+    },
+    "Incorrect email or password.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Fel e-postadress eller lösenord."
+          }
+        }
+      }
+    },
+    "Name can be at most %lld characters": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Namnet får vara högst %lld tecken"
+          }
+        }
+      }
+    },
+    "New sign-ups are currently closed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det går inte att skapa nya konton just nu."
+          }
+        }
+      }
+    },
+    "Password can be at most %lld characters": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Lösenordet får vara högst %lld tecken"
+          }
+        }
+      }
+    },
+    "Password must be at least %lld characters": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Lösenordet måste vara minst %lld tecken"
+          }
+        }
+      }
+    },
+    "Password must contain a letter and a number": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Lösenordet måste innehålla en bokstav och en siffra"
+          }
+        }
+      }
+    },
+    "Passwords do not match": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Lösenorden matchar inte"
+          }
+        }
+      }
+    },
+    "Please enter a valid email address": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ange en giltig e-postadress"
+          }
+        }
+      }
+    },
+    "Something went wrong. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Något gick fel. Försök igen."
+          }
+        }
+      }
+    },
+    "That code is wrong or has expired. Check the email, or send a new code.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Koden är fel eller har gått ut. Kontrollera mejlet eller skicka en ny kod."
+          }
+        }
+      }
+    },
+    "That password is too weak. Choose a longer one or mix letters, numbers and symbols.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Lösenordet är för svagt. Välj ett längre eller blanda bokstäver, siffror och symboler."
+          }
+        }
+      }
+    },
+    "The server address is invalid. Please contact the developer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Serveradressen är ogiltig. Kontakta utvecklaren."
+          }
+        }
+      }
+    },
+    "The server address is not configured. Please contact the developer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Serveradressen är inte konfigurerad. Kontakta utvecklaren."
+          }
+        }
+      }
+    },
+    "The server key is not configured. Please contact the developer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Servernyckeln är inte konfigurerad. Kontakta utvecklaren."
+          }
+        }
+      }
+    },
+    "This sign-in method isn't available right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Den här inloggningsmetoden är inte tillgänglig just nu."
+          }
+        }
+      }
+    },
+    "Too many attempts. Please wait a few minutes and try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "För många försök. Vänta några minuter och försök igen."
+          }
+        }
+      }
+    },
+    "Your account could not be deleted. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Det gick inte att radera kontot. Försök igen."
+          }
+        }
+      }
+    },
+    "Your session has expired. Please sign in again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Din session har gått ut. Logga in igen."
+          }
+        }
+      }
+    },
+    "Your session has expired. Sign in again, then delete your account.": {
+      "extractionState": "manual",
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Din session har gått ut. Logga in igen och radera sedan kontot."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
