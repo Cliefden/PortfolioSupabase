@@ -3,12 +3,17 @@ import Supabase
 import Testing
 @testable import PortfolioSupabase
 
-func apiError(_ code: String, status: Int = 400, message: String = "x") -> AuthError {
+func apiError(
+    _ code: String,
+    status: Int = 400,
+    message: String = "x",
+    url: String = "https://a.crawik.com/auth/v1/token"
+) -> AuthError {
     .api(
         message: message,
         errorCode: ErrorCode(code),
         underlyingData: Data(),
-        underlyingResponse: HTTPURLResponse(url: URL(string: "https://a.crawik.com/auth/v1/token")!, statusCode: status, httpVersion: nil, headerFields: nil)!
+        underlyingResponse: HTTPURLResponse(url: URL(string: url)!, statusCode: status, httpVersion: nil, headerFields: nil)!
     )
 }
 
@@ -45,6 +50,48 @@ func postgrestError(code: String?, message: String) throws -> PostgrestError {
         #expect(!AuthFailure.isAuthRejection(try postgrestError(code: "PGRST116", message: "JSON object requested, multiple (or no) rows returned")))
         #expect(!AuthFailure.isAuthRejection(FunctionsError.httpError(code: 402, data: Data())))
         #expect(!AuthFailure.isAuthRejection(StorageError(statusCode: "403", message: "new row violates row-level security policy")))
+    }
+
+    /// Older self-hosted GoTrue: `400 {"error":"invalid_grant",…}` without an
+    /// `error_code`, so the SDK reports `ErrorCode.unknown` and the
+    /// description as message.
+    @Test func bareInvalidGrantFromOlderGoTrue() {
+        func bare(_ description: String, status: Int = 400, url: String) -> AuthError {
+            .api(
+                message: description,
+                errorCode: .unknown,
+                underlyingData: Data(#"{"error":"invalid_grant","error_description":"\#(description)"}"#.utf8),
+                underlyingResponse: HTTPURLResponse(url: URL(string: url)!, statusCode: status, httpVersion: nil, headerFields: nil)!
+            )
+        }
+        let refreshURL = "https://a.crawik.com/auth/v1/token?grant_type=refresh_token"
+        let unknownURL = "https://a.crawik.com/auth/v1/token"
+        let passwordURL = "https://a.crawik.com/auth/v1/token?grant_type=password"
+
+        #expect(AuthFailure.isAuthRejection(bare("Session Expired", url: refreshURL)))
+        #expect(AuthFailure.isAuthRejection(bare("Refresh token revoked", url: unknownURL)))
+        // The password grant's invalid_grant is about credentials, not a session.
+        #expect(!AuthFailure.isAuthRejection(bare("Invalid login credentials", url: passwordURL)))
+        #expect(!AuthFailure.isAuthRejection(bare("Invalid login credentials", url: unknownURL)))
+        #expect(!AuthFailure.isAuthRejection(bare("Email not confirmed", url: unknownURL)))
+        #expect(!AuthFailure.isAuthRejection(bare("Something odd", url: passwordURL)))
+    }
+
+    /// Any 400–403 on the refresh grant means the refresh token is dead;
+    /// 429 and 5xx do not.
+    @Test func refreshGrantStatuses() {
+        func refresh(_ status: Int) -> AuthError {
+            apiError("unknown", status: status, message: "x", url: "https://a.crawik.com/auth/v1/token?grant_type=refresh_token")
+        }
+        for status in [400, 401, 403] {
+            #expect(AuthFailure.isAuthRejection(refresh(status)), "\(status)")
+        }
+        for status in [404, 408, 422, 429, 500, 502, 503] {
+            #expect(!AuthFailure.isAuthRejection(refresh(status)), "\(status)")
+        }
+        // A 400 on another endpoint stays a plain error.
+        #expect(!AuthFailure.isAuthRejection(apiError("unknown", status: 400, message: "x", url: "https://a.crawik.com/auth/v1/user")))
+        #expect(!AuthFailure.isAuthRejection(apiError("validation_failed", status: 400, message: "x", url: "https://a.crawik.com/auth/v1/token?grant_type=password")))
     }
 
     @Test func transient() {

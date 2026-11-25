@@ -107,6 +107,46 @@ private func resolve(_ resource: LocalizedStringResource, _ locale: String) -> S
         #expect(resolve(AppleSignInError.failed("boom").localizedResource, "sv") == "Det gick inte att logga in med Apple: boom")
     }
 
+    @Test func germanFrenchSpanish() {
+        let deletion = AccountDeletionError.deletionFailed(underlying: URLError(.badServerResponse)).localizedResource
+        #expect(resolve(deletion, "de") == "Dein Konto konnte nicht gelöscht werden. Bitte versuche es erneut.")
+        #expect(resolve(deletion, "fr") == "Impossible de supprimer votre compte. Veuillez réessayer.")
+        #expect(resolve(deletion, "es") == "No se pudo eliminar tu cuenta. Inténtalo de nuevo.")
+        #expect(resolve(AppleSignInError.failed("boom").localizedResource, "de") == "Die Anmeldung mit Apple ist fehlgeschlagen: boom")
+        #expect(resolve(AppleSignInError.failed("boom").localizedResource, "fr") == "Impossible de se connecter avec Apple : boom")
+        #expect(resolve(PasswordRule.minimumLength(10).localizedResource, "es") == "La contraseña debe tener al menos 10 caracteres")
+        #expect(resolve(SupabaseConfigurationError.missingAnonKey.localizedResource, "fr")
+            == "La clé du serveur n'est pas configurée. Veuillez contacter le développeur.")
+    }
+
+    @Test func appleFormTitles() {
+        #expect(resolve(AppleSignInFormTitle.signIn, "en") == "Sign in with Apple")
+        #expect(resolve(AppleSignInFormTitle.signIn, "sv") == "Logga in med Apple")
+        #expect(resolve(AppleSignInFormTitle.signIn, "de") == "Mit Apple anmelden")
+        #expect(resolve(AppleSignInFormTitle.continueWithApple, "fr") == "Continuer avec Apple")
+        #expect(resolve(AppleSignInFormTitle.signUp, "es") == "Registrarse con Apple")
+    }
+
+    /// Every user-facing string the package owns is translated into every
+    /// shipped language.
+    @Test(arguments: ["sv", "de", "fr", "es"])
+    func everyStringIsTranslated(_ locale: String) {
+        var resources: [LocalizedStringResource] = AuthErrorKind.allCases.map(\.localizedResource)
+        resources += [SupabaseConfigurationError.missingURL, .missingAnonKey, .invalidURL].map(\.localizedResource)
+        resources += [
+            AccountDeletionError.sessionUnavailable(underlying: URLError(.notConnectedToInternet)),
+            .sessionUnavailable(underlying: AuthError.sessionMissing),
+            .deletionFailed(underlying: URLError(.badServerResponse)),
+        ].map(\.localizedResource)
+        resources += [AppleSignInError.incompleteCredential, .failed("x")].map(\.localizedResource)
+        resources += [PasswordRule.minimumLength(8), .maximumLength(72), .letterAndDigit, .matchesConfirmation].map(\.localizedResource)
+        resources += [CredentialValidationError.emptyEmail, .invalidEmail, .emptyDisplayName, .displayNameTooLong(maximum: 100)].map(\.localizedResource)
+        resources += [AppleSignInFormTitle.signIn, AppleSignInFormTitle.continueWithApple, AppleSignInFormTitle.signUp]
+        for resource in resources {
+            #expect(resolve(resource, locale) != resolve(resource, "en"), "\(resource.key)")
+        }
+    }
+
     @Test func everyKindIsTranslatedToSwedish() {
         for kind in AuthErrorKind.allCases {
             #expect(resolve(kind.localizedResource, "sv") != resolve(kind.localizedResource, "en"), "\(kind)")

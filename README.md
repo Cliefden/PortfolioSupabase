@@ -8,7 +8,8 @@ apps still call `client.auth`, `client.from(...)`, `client.storage` and so on.
 
 - swift-tools 6.0 (Swift 6 language mode), iOS 17 / watchOS 10 / macOS 14 / visionOS 1
 - Depends on `supabase-swift` `from: "2.40.0"` (product `Supabase`). Tested against **2.40.0 and 2.55.5**.
-- Strings in `Resources/Localizable.xcstrings` (en + sv), resolved from `Bundle.module`, same pattern as PortfolioKit.
+- Strings in `Resources/Localizable.xcstrings` (en, sv, de, fr, es), resolved from `Bundle.module`, same pattern as PortfolioKit.
+  Non-English values are machine translations marked `needs_review`; German uses *du*, Spanish *tú*, French *vous* (as Sextant).
 
 Depend on it by URL + version, like PortfolioKit (CI-safe in Xcode Cloud; use
 `Add Local…` only for local development).
@@ -25,9 +26,10 @@ Depend on it by URL + version, like PortfolioKit (CI-safe in Xcode Cloud; use
 |---|---|
 | Configuration | `SupabaseEnvironment`, `SupabaseConfigurationError` |
 | Auth storage | `KeychainAuthStorage`, `UserDefaultsAuthStorage`, `MigratingAuthStorage`, `InMemoryAuthStorage`, `KeychainBackend` / `SystemKeychain` |
-| Client | `PortfolioSupabase.makeClient(environment:storage:…)`, `.authOptions(…)`, `.makeUnconfiguredClient()`, `.signOut(client:scope:)` |
+| Hand-rolled → SDK | `LegacyTokenSessionStore`, `LegacyTokenSession`, `LegacyTokenSessionMigrator`, `LegacyTokenSessionMigrationOutcome` |
+| Client | `PortfolioSupabase.makeClient(environment:storage:…:db:session:logger:)`, `.clientOptions(…)`, `.authOptions(…)`, `.makeUnconfiguredClient()`, `.signOut(client:scope:)` |
 | Session | `SessionObserver` (`@Observable @MainActor`), `UserChangeGuard`, `AuthFailure` |
-| Sign in with Apple | `AppleSignInNonce`, `AuthClient.signInWithApple(idToken:nonce:)`, `AppleSignInCredential`, `AppleSignInFlow`, `AppleSignInButton`, `AppleSignIn.userUsesApple` |
+| Sign in with Apple | `AppleSignInNonce`, `AuthClient.signInWithApple(idToken:nonce:)`, `AppleSignInCredential`, `AppleSignInFlow`, `AppleSignInButton`, `AppleSignInFormButton`, `AppleSignInFormTitle`, `AppleSignIn.userUsesApple` |
 | Validation & copy | `CredentialValidation`, `PasswordPolicy`, `PasswordRule`, `CredentialValidationError`, `AuthErrorMessage`, `AuthErrorKind` |
 | Account deletion | `AccountDeletion.deleteAccount(client:strategy:cleanup:)`, `AccountDeletionStrategy`, `AccountDeletionError` |
 | Storage | `StorageUploader`, `StoragePath`, `RetryPolicy` |
@@ -66,6 +68,23 @@ if let error = Backend.environment.configurationError { /* show error.localizedD
 When the environment is unconfigured it returns a non-functional client on
 `https://invalid.supabase.co` with in-memory storage instead of crashing.
 
+Database coders, the `URLSession` and the SDK logger are optional parameters
+(all defaulted, so existing calls are unchanged):
+
+```swift
+static let client = PortfolioSupabase.makeClient(
+    environment: environment,
+    storage: storage,
+    storageKey: "sb-sextant-auth-token",
+    db: .init(encoder: AppCoding.encoder, decoder: AppCoding.decoder),  // schema too: .init(schema: "app", …)
+    session: timeoutSession,                                           // or a URLProtocol stub in tests
+    logger: nil
+)
+```
+
+`PortfolioSupabase.clientOptions(storage:…:db:session:logger:)` returns the same
+`SupabaseClientOptions` for apps that build `SupabaseClient` themselves.
+
 `SupabaseEnvironment` requires https, treats empty values, `YOUR_SUPABASE…`,
 `<your-…>`, `REPLACE…` and unexpanded `$(VAR)` as missing, and matches the host
 allowlist by exact host or subdomain only (never by substring).
@@ -90,6 +109,50 @@ allowlist by exact host or subdomain only (never by substring).
 `MigratingAuthStorage(from:to:)` reads `primary` first. On a miss it copies a
 legacy value into `primary` and deletes the legacy copy. If that copy fails, it
 keeps the legacy value and still returns the session.
+
+### Token-only sessions from a hand-rolled client
+
+`MigratingAuthStorage` only moves values already in the SDK's format. The
+hand-rolled GoTrue clients (Otta, Svamp, Sextant ≤ 1.1 (12)) stored just
+`{accessToken, refreshToken, userID|userId, expiresAt}` as `JSONEncoder()` output
+in a generic-password item with an account and **no service**. There is no `User`
+to build an SDK `Session` from, so the migrator redeems the old refresh token once
+with `client.auth.refreshSession(refreshToken:)` and lets the SDK store the result.
+
+```swift
+let migrator = LegacyTokenSessionMigrator(
+    store: LegacyTokenSessionStore(account: "supabase.session.v1"),   // Otta, Svamp
+    // store: LegacyTokenSessionStore(account: "sextant.supabase.session"),
+    client: Backend.client
+)
+
+// Launch: show the user as signed in while the old item is still there.
+isSignedIn = Backend.client.auth.currentSession != nil || migrator.hasPendingSession
+Task { await migrator.migrateIfNeeded() }
+
+// Before sync: finish first, and surface "offline" rather than "sign in".
+if case .deferred(let error) = await migrator.migrateIfNeeded() { throw error }
+
+// A fresh sign-in or a sign-out supersedes the old item.
+await migrator.discard()
+```
+
+| Outcome | When | Legacy item |
+|---|---|---|
+| `.migrated(userID:)` | refresh succeeded; the SDK holds the session | deleted |
+| `.alreadyMigrated` | the SDK already had a session (no network call) | deleted |
+| `.rejected(error)` | `AuthFailure.isAuthRejection` (revoked/expired/unknown token) | deleted |
+| `.corrupt` | the item can't be decoded | deleted |
+| `.deferred(error)` | offline, 5xx/429, or Keychain locked (`errSecInteractionNotAllowed`) | **kept**, retried on the next call |
+| `.nothingToMigrate` | no item, or a previous call finished | – |
+
+- Calls are single-flight (it's an `actor`): a refresh token is single-use, so a
+  second parallel redemption would be rejected as reused.
+- The default decoder accepts camelCase (`userID`/`userId`, `isAnonymous`) and
+  snake_case keys; only the refresh token is required. Pass
+  `decode:` for another format, and `service:`/`accessGroup:` if the item had them.
+- `backend:` takes any `KeychainBackend`, so tests run against an in-memory keychain.
+- `init(store:hasSDKSession:redeem:)` injects the two SDK steps for tests.
 
 ### SessionObserver
 
@@ -124,6 +187,13 @@ let rows: [Item] = try await session.withSessionRefresh {
   PostgREST `PGRST301/302/303`, `FunctionsError.httpError(401)` and Storage
   401 / "jwt expired". It falls back to message matching only for untyped errors.
   `URLError` is never a rejection.
+- Refresh-token rejections from **older self-hosted GoTrue** carry no
+  `error_code`: a bare `400 {"error":"invalid_grant","error_description":"…"}`.
+  Any 400–403 answer to `POST /token?grant_type=refresh_token` counts as a
+  rejection (429 and 5xx do not), and so does a bare `invalid_grant` body from an
+  unknown grant unless its message is about credentials ("Invalid login
+  credentials", "Email not confirmed"), which is the password grant's
+  `invalid_grant`. A 400 from any other endpoint stays a plain error.
 - The SDK already coalesces concurrent refreshes of the same refresh token (in
   both 2.40 and 2.55), so this layer adds no single-flight logic of its own.
 - `waitForInitialSession()` covers Nassau's `ensureAuthenticated` pattern.
@@ -143,6 +213,30 @@ AppleSignInButton(.continue, flow: apple) { credential in
     message = error.localizedDescription                // cancellation is filtered out
 }
 ```
+
+In a native `Form` (or anywhere the black/white button doesn't fit), use
+`AppleSignInFormButton`, an ordinary `Button` that runs the same nonce flow
+through SwiftUI's `AuthorizationController`:
+
+```swift
+Form {
+    Section {
+        AppleSignInFormButton(flow: apple) { credential in              // Label("Sign in with Apple", systemImage: "apple.logo")
+            try? await Backend.client.auth.signInWithApple(credential)
+        } onError: { message = $0.localizedDescription }
+        // AppleSignInFormButton(AppleSignInFormTitle.continueWithApple, flow: apple) { … } onError: { … }
+        // AppleSignInFormButton(flow: apple) { … } onError: { … } label: { MyLabel() }
+    }
+}
+```
+
+It disables itself while running and ignores cancellation. The titles
+(`AppleSignInFormTitle.signIn` / `.continueWithApple` / `.signUp`) are localized
+by the package. Keep Apple's wording and logo (HIG, App Review 4.8). To start the
+flow from anything else, call `apple.signIn(using: authorizationController)`
+(from `@Environment(\.authorizationController)`), which returns `nil` on
+cancel, or use `apple.makeRequest()` + `apple.credential(fromAppleID:)` with your
+own `ASAuthorizationController`.
 
 `AppleSignInNonce.random(length:)` and `.sha256(_:)` keep Stokked's API.
 `AppleSignIn.userUsesApple(user)` decides whether to revoke Apple tokens on
@@ -289,8 +383,8 @@ our own GoTrue client costs.
 
 | App | Hand-rolled today | Switch to |
 |---|---|---|
-| **Otta** (`ios/Otta/Services/SupabaseClient.swift`, `AuthService.swift`, `SupabaseModels.swift`; `MacOttaAdmin` copy) | `actor SupabaseClient`, `/auth/v1/signup` + `/token`, own Apple sign-in, `SupabaseError` | `makeClient` + `KeychainAuthStorage`; `client.auth.signUp/signIn/signInWithApple(credential)`; `client.from(...)`; `AuthErrorMessage` instead of `SupabaseError` copy |
-| **Sextant** (`Sextant/Services/SupabaseClient.swift`, `AuthService.swift`) / **Svamp** (`Svamp/Services/SupabaseClient.swift`) | copies of Otta's client | same as Otta; delete the copies |
+| **Otta** (`ios/Otta/Services/SupabaseClient.swift`, `AuthService.swift`, `SupabaseModels.swift`; `MacOttaAdmin` copy) | `actor SupabaseClient`, `/auth/v1/signup` + `/token`, own Apple sign-in, `SupabaseError`; session `UserSession` in Keychain account `supabase.session.v1` (no service) | `makeClient` + `KeychainAuthStorage`; `LegacyTokenSessionMigrator(store: LegacyTokenSessionStore(account: "supabase.session.v1"), client:)` keeps users (incl. anonymous ones) signed in; `client.auth.signUp/signIn/signInWithApple(credential)`; `client.from(...)`; `AuthErrorMessage` instead of `SupabaseError` copy |
+| **Sextant** (`Sextant/Services/SupabaseClient.swift`, `AuthService.swift`) / **Svamp** (`Svamp/Services/SupabaseClient.swift`) | copies of Otta's client (Sextant account `sextant.supabase.session`, Svamp `supabase.session.v1`) | same as Otta; delete the copies. Sextant's `LegacySessionMigration` / `AuthErrorClassifier` → `LegacyTokenSessionMigrator` / `AuthFailure` |
 | **Contrarian / Contria** (`ios/Sources/ContriaAPI.swift`, `AppState.swift`) | `authCall` for signup/token/refresh, anonymous `POST /signup`, conversion `PUT /user` + forced refresh, `withFreshToken` with single-flight refresh, engine calls with a bearer | `client.auth.signIn/signUp/signInAnonymously()`; conversion `client.auth.update(user: UserAttributes(email:password:))` then `refreshSession()` (clears `is_anonymous`); `SessionObserver.withSessionRefresh` (the SDK coalesces refreshes); engine → `client.functions.invoke("contria-engine", options:)` and map `FunctionsError.httpError(402/403/429)` as today. Keep the raw `/recover` call (PKCE note). The web app stays zero-SDK |
 | **Ariman** (`ariman-ios/Sources/Networking/SupabaseService.swift`, `Session.swift`) | own `/auth/v1/token` + session persistence | `makeClient` + `KeychainAuthStorage` (or `MigratingAuthStorage` from its current store), `SessionObserver` |
 | **Celiador iOS** (`celiador-ios/Shared/Api.swift`) | password sign-in, **magic link** (`POST /auth/v1/otp`), **GitHub OAuth** (`/auth/v1/authorize?provider=github`), the `celiador://auth-callback` handler, refresh coalescing, `importSession` | `makeClient(…, redirectToURL: URL(string: "celiador://auth-callback"))`. Magic link → `client.auth.signInWithOTP(email:redirectTo:shouldCreateUser:)`. GitHub → `client.auth.signInWithOAuth(provider: .github, redirectTo:)`, which runs `ASWebAuthenticationSession` itself (or `getOAuthSignInURL` + `launchFlow:` for custom presentation). Callback → `client.auth.session(from: url)` (or `client.auth.handle(url)` from `onOpenURL`). `importSession` → `client.auth.setSession(accessToken:refreshToken:)`. Daemon bearer → `try await client.auth.session.accessToken` (auto-refreshed). Refresh coalescing is built in |
@@ -336,11 +430,14 @@ DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer swift test --packa
 DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild -scheme PortfolioSupabase -destination generic/platform=iOS build
 ```
 
-Tests (Swift Testing, 87 tests) cover the pure parts: environment parsing and
+Tests (Swift Testing, 120 tests) cover the pure parts: environment parsing and
 host allowlist, keychain storage against an in-memory `KeychainBackend` (update-then-add,
 accessibility migration, the add race, errors), UserDefaults and migrating
-storage, validation, nonce, auth-failure and error-code mapping, the
+storage, validation, nonce, auth-failure and error-code mapping (incl. old
+GoTrue's bare `invalid_grant`), the
 `SessionObserver` buffering, refresh-retry and user-change logic (driven by
 decoded `Session`s), the account-deletion order and fallbacks, retry/backoff,
-storage paths, pagination, and en/sv lookups. Network paths (`makeClient`
-against a live stack, real uploads) are not unit-tested.
+storage paths, pagination, the token-only session migration, the Apple request
+setup, and lookups in every shipped language. The legacy migration and
+`makeClient`'s `db:`/`session:` options also run end to end through the real SDK
+against a `URLProtocol` stub. A live stack and real uploads are not tested.
