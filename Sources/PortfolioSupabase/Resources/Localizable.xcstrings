@@ -4,6 +4,24 @@
     "An account with this email already exists. Sign in instead.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Es gibt bereits ein Konto mit dieser E-Mail-Adresse. Melde dich stattdessen an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ya existe una cuenta con este correo electrónico. Inicia sesión en su lugar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Un compte existe déjà avec cette adresse e-mail. Connectez-vous plutôt."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -15,6 +33,24 @@
     "Choose a password different from your current one.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Wähle ein anderes Passwort als dein aktuelles."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Elige una contraseña distinta de la actual."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Choisissez un mot de passe différent de l'actuel."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -26,6 +62,24 @@
     "Confirm your email address first. Check your inbox for the link.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Bestätige zuerst deine E-Mail-Adresse. Den Link findest du in deinem Posteingang."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Primero confirma tu correo electrónico. Busca el enlace en tu bandeja de entrada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Confirmez d'abord votre adresse e-mail. Le lien se trouve dans votre boîte de réception."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -34,9 +88,56 @@
         }
       }
     },
+    "Continue with Apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Mit Apple fortfahren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Continuar con Apple"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Continuer avec Apple"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Fortsätt med Apple"
+          }
+        }
+      }
+    },
     "Could not sign in with Apple. Please try again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Die Anmeldung mit Apple ist fehlgeschlagen. Bitte versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "No se pudo iniciar sesión con Apple. Inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Impossible de se connecter avec Apple. Veuillez réessayer."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -48,6 +149,24 @@
     "Could not sign in with Apple: %@": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Die Anmeldung mit Apple ist fehlgeschlagen: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "No se pudo iniciar sesión con Apple: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Impossible de se connecter avec Apple : %@"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -59,6 +178,24 @@
     "Couldn't connect. Check your connection and try again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Keine Verbindung möglich. Prüfe deine Verbindung und versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "No se pudo conectar. Comprueba tu conexión e inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Connexion impossible. Vérifiez votre connexion et réessayez."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -70,6 +207,24 @@
     "Enter your email address": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Gib deine E-Mail-Adresse ein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Introduce tu correo electrónico"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Saisissez votre adresse e-mail"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -81,6 +236,24 @@
     "Enter your name": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Gib deinen Namen ein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Introduce tu nombre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Saisissez votre nom"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -92,6 +265,24 @@
     "Incorrect email or password.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "E-Mail-Adresse oder Passwort ist falsch."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Correo electrónico o contraseña incorrectos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Adresse e-mail ou mot de passe incorrect."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -103,6 +294,24 @@
     "Name can be at most %lld characters": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Der Name darf höchstens %lld Zeichen lang sein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "El nombre puede tener como máximo %lld caracteres"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Le nom ne peut pas dépasser %lld caractères"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -114,6 +323,24 @@
     "New sign-ups are currently closed.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Neue Registrierungen sind derzeit nicht möglich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Los nuevos registros están cerrados por ahora."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Les nouvelles inscriptions sont actuellement fermées."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -125,6 +352,24 @@
     "Password can be at most %lld characters": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Das Passwort darf höchstens %lld Zeichen lang sein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La contraseña puede tener como máximo %lld caracteres"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Le mot de passe ne peut pas dépasser %lld caractères"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -136,6 +381,24 @@
     "Password must be at least %lld characters": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Das Passwort muss mindestens %lld Zeichen lang sein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La contraseña debe tener al menos %lld caracteres"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Le mot de passe doit contenir au moins %lld caractères"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -147,6 +410,24 @@
     "Password must contain a letter and a number": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Das Passwort muss einen Buchstaben und eine Ziffer enthalten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La contraseña debe contener una letra y un número"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Le mot de passe doit contenir une lettre et un chiffre"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -158,6 +439,24 @@
     "Passwords do not match": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Die Passwörter stimmen nicht überein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Las contraseñas no coinciden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Les mots de passe ne correspondent pas"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -169,6 +468,24 @@
     "Please enter a valid email address": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Gib eine gültige E-Mail-Adresse ein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Introduce un correo electrónico válido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Saisissez une adresse e-mail valide"
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -177,9 +494,85 @@
         }
       }
     },
+    "Sign in with Apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Mit Apple anmelden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Iniciar sesión con Apple"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Se connecter avec Apple"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Logga in med Apple"
+          }
+        }
+      }
+    },
+    "Sign up with Apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Mit Apple registrieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Registrarse con Apple"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "S'inscrire avec Apple"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Registrera dig med Apple"
+          }
+        }
+      }
+    },
     "Something went wrong. Please try again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Algo salió mal. Inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Une erreur s'est produite. Veuillez réessayer."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -191,6 +584,24 @@
     "That code is wrong or has expired. Check the email, or send a new code.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Der Code ist falsch oder abgelaufen. Prüfe die E-Mail oder fordere einen neuen Code an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "El código es incorrecto o ha caducado. Revisa el correo o solicita un código nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ce code est incorrect ou a expiré. Vérifiez l'e-mail ou demandez un nouveau code."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -202,6 +613,24 @@
     "That password is too weak. Choose a longer one or mix letters, numbers and symbols.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Das Passwort ist zu schwach. Wähle ein längeres oder kombiniere Buchstaben, Ziffern und Symbole."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La contraseña es demasiado débil. Elige una más larga o combina letras, números y símbolos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Ce mot de passe est trop faible. Choisissez-en un plus long ou mélangez lettres, chiffres et symboles."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -213,6 +642,24 @@
     "The server address is invalid. Please contact the developer.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Die Serveradresse ist ungültig. Bitte kontaktiere den Entwickler."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La dirección del servidor no es válida. Ponte en contacto con el desarrollador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "L'adresse du serveur n'est pas valide. Veuillez contacter le développeur."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -224,6 +671,24 @@
     "The server address is not configured. Please contact the developer.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Die Serveradresse ist nicht konfiguriert. Bitte kontaktiere den Entwickler."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La dirección del servidor no está configurada. Ponte en contacto con el desarrollador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "L'adresse du serveur n'est pas configurée. Veuillez contacter le développeur."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -235,6 +700,24 @@
     "The server key is not configured. Please contact the developer.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Der Serverschlüssel ist nicht konfiguriert. Bitte kontaktiere den Entwickler."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La clave del servidor no está configurada. Ponte en contacto con el desarrollador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "La clé du serveur n'est pas configurée. Veuillez contacter le développeur."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -246,6 +729,24 @@
     "This sign-in method isn't available right now.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Diese Anmeldemethode ist derzeit nicht verfügbar."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Este método de inicio de sesión no está disponible en este momento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Cette méthode de connexion n'est pas disponible pour le moment."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -257,6 +758,24 @@
     "Too many attempts. Please wait a few minutes and try again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Zu viele Versuche. Bitte warte ein paar Minuten und versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Trop de tentatives. Veuillez patienter quelques minutes et réessayer."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -268,6 +787,24 @@
     "Your account could not be deleted. Please try again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Dein Konto konnte nicht gelöscht werden. Bitte versuche es erneut."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "No se pudo eliminar tu cuenta. Inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Impossible de supprimer votre compte. Veuillez réessayer."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -279,6 +816,24 @@
     "Your session has expired. Please sign in again.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Tu sesión ha caducado. Vuelve a iniciar sesión."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Votre session a expiré. Veuillez vous reconnecter."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",
@@ -290,6 +845,24 @@
     "Your session has expired. Sign in again, then delete your account.": {
       "extractionState": "manual",
       "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Deine Sitzung ist abgelaufen. Melde dich erneut an und lösche dann dein Konto."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Tu sesión ha caducado. Vuelve a iniciar sesión y luego elimina tu cuenta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Votre session a expiré. Reconnectez-vous, puis supprimez votre compte."
+          }
+        },
         "sv": {
           "stringUnit": {
             "state": "needs_review",

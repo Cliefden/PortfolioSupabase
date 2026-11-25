@@ -27,13 +27,21 @@ public enum PortfolioSupabase {
     ///   - flowType: PKCE by default. Use `.implicit` only for flows whose
     ///     emailed link must be redeemable on another device (see README).
     ///   - headers: extra global headers.
+    ///   - db: PostgREST options: schema and the JSON coders for rows (e.g.
+    ///     an app's own date format). Defaults to the SDK's.
+    ///   - session: the `URLSession` every sub-client uses (custom timeouts,
+    ///     or a `URLProtocol` stub in tests). Defaults to `.shared`, as the SDK.
+    ///   - logger: the SDK logger, passed to every sub-client.
     public static func makeClient(
         environment: SupabaseEnvironment,
         storage: any AuthLocalStorage,
         redirectToURL: URL? = nil,
         storageKey: String? = nil,
         flowType: AuthFlowType = AuthClient.Configuration.defaultFlowType,
-        headers: [String: String] = [:]
+        headers: [String: String] = [:],
+        db: SupabaseClientOptions.DatabaseOptions = .init(),
+        session: URLSession = .shared,
+        logger: (any SupabaseLogger)? = nil
     ) -> SupabaseClient {
         guard environment.isConfigured, let url = environment.url else {
             return makeUnconfiguredClient()
@@ -41,15 +49,41 @@ public enum PortfolioSupabase {
         return SupabaseClient(
             supabaseURL: url,
             supabaseKey: environment.anonKey,
-            options: SupabaseClientOptions(
-                auth: authOptions(
-                    storage: storage,
-                    redirectToURL: redirectToURL,
-                    storageKey: storageKey,
-                    flowType: flowType
-                ),
-                global: SupabaseClientOptions.GlobalOptions(headers: headers)
+            options: clientOptions(
+                storage: storage,
+                redirectToURL: redirectToURL,
+                storageKey: storageKey,
+                flowType: flowType,
+                headers: headers,
+                db: db,
+                session: session,
+                logger: logger
             )
+        )
+    }
+
+    /// The full `SupabaseClientOptions` ``makeClient(environment:storage:redirectToURL:storageKey:flowType:headers:db:session:logger:)``
+    /// builds: the shared auth options plus the given db and global options.
+    /// For apps that construct `SupabaseClient` themselves.
+    public static func clientOptions(
+        storage: any AuthLocalStorage,
+        redirectToURL: URL? = nil,
+        storageKey: String? = nil,
+        flowType: AuthFlowType = AuthClient.Configuration.defaultFlowType,
+        headers: [String: String] = [:],
+        db: SupabaseClientOptions.DatabaseOptions = .init(),
+        session: URLSession = .shared,
+        logger: (any SupabaseLogger)? = nil
+    ) -> SupabaseClientOptions {
+        SupabaseClientOptions(
+            db: db,
+            auth: authOptions(
+                storage: storage,
+                redirectToURL: redirectToURL,
+                storageKey: storageKey,
+                flowType: flowType
+            ),
+            global: SupabaseClientOptions.GlobalOptions(headers: headers, session: session, logger: logger)
         )
     }
 
@@ -73,7 +107,7 @@ public enum PortfolioSupabase {
 
     /// A client pointed at an invalid host with in-memory storage. Every call
     /// fails (as a network error), nothing touches the keychain, and nothing
-    /// crashes. Used by ``makeClient(environment:storage:redirectToURL:storageKey:flowType:headers:)``
+    /// crashes. Used by ``makeClient(environment:storage:redirectToURL:storageKey:flowType:headers:db:session:logger:)``
     /// when the environment is unconfigured.
     public static func makeUnconfiguredClient() -> SupabaseClient {
         SupabaseClient(

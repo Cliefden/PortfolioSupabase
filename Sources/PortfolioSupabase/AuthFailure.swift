@@ -36,9 +36,11 @@ public enum AuthFailure {
 
         if let authError = error as? AuthError {
             if case .sessionMissing = authError { return true }
-            if case .api(let message, let code, _, let response) = authError {
+            if case .api(let message, let code, let data, let response) = authError {
                 if authRejectionCodes.contains(code.rawValue) { return true }
                 if response.statusCode == 401 { return true }
+                if isRefreshGrantRejection(response) { return true }
+                if isBareInvalidGrant(data: data, response: response, message: message) { return true }
                 return containsRejectionFragment(message)
             }
             return false
@@ -79,6 +81,56 @@ public enum AuthFailure {
         .notConnectedToInternet, .dnsLookupFailed, .cannotFindHost,
         .internationalRoamingOff, .dataNotAllowed, .secureConnectionFailed,
     ]
+
+    /// Statuses GoTrue uses to refuse a refresh token: 400 (`invalid_grant`,
+    /// older versions without an `error_code`), 401 and 403. Not 429 (rate
+    /// limit) and not 5xx: the token may still be fine.
+    static let refreshGrantRejectionStatuses = 400...403
+
+    /// Message fragments of the *other* `invalid_grant` failures (password
+    /// grant), which are about credentials, not about a session.
+    static let credentialMessageFragments = [
+        "invalid login credentials", "email not confirmed", "phone not confirmed",
+    ]
+
+    /// `true` for a 400–403 answer to `POST /token?grant_type=refresh_token`.
+    /// On the refresh grant every such status means the refresh token is
+    /// unusable (revoked, reused, expired, unknown, user banned or deleted),
+    /// whatever the GoTrue version put in the body.
+    static func isRefreshGrantRejection(_ response: HTTPURLResponse) -> Bool {
+        grantType(of: response) == "refresh_token"
+            && refreshGrantRejectionStatuses.contains(response.statusCode)
+    }
+
+    /// Older self-hosted GoTrue answers a dead refresh token with a bare
+    /// OAuth2 body, `400 {"error":"invalid_grant","error_description":"…"}`
+    /// and no `error_code`. The SDK then reports `ErrorCode.unknown` and the
+    /// description as the message, which may not mention the refresh token.
+    /// The password grant uses `invalid_grant` too ("Invalid login
+    /// credentials"), so a request known to be another grant, or a credentials
+    /// message, is not a rejection.
+    static func isBareInvalidGrant(data: Data, response: HTTPURLResponse, message: String) -> Bool {
+        guard response.statusCode == 400,
+              oauthError(in: data) == "invalid_grant" else { return false }
+        if let grant = grantType(of: response), grant != "refresh_token" { return false }
+        let lowered = message.lowercased()
+        return !credentialMessageFragments.contains { lowered.contains($0) }
+    }
+
+    /// The OAuth2 `error` field of a GoTrue error body, if any.
+    static func oauthError(in data: Data) -> String? {
+        guard !data.isEmpty,
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+        return (object["error"] as? String)?.lowercased()
+    }
+
+    /// `grant_type` of a `/token` request, from the response URL.
+    static func grantType(of response: HTTPURLResponse) -> String? {
+        guard let url = response.url,
+              url.path.hasSuffix("/token"),
+              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
+        return items.first { $0.name == "grant_type" }?.value?.lowercased()
+    }
 
     static func containsRejectionFragment(_ text: String) -> Bool {
         let lowered = text.lowercased()
